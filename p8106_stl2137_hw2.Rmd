@@ -6,6 +6,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(mgcv)
 ```
 
 The response variable is the out-of-state tuition (Outstate). 
@@ -17,7 +18,7 @@ school_no_columbia_dat <- school_dat[-125,]
 ```
 
 ## Part A 
-(a) Create scatter plots of response vs. predictors.
+
 ```{r}
 predictors_df <- school_no_columbia_dat %>% 
   select(outstate, everything()) %>% 
@@ -34,5 +35,40 @@ predictors_df %>%
   ) +
   geom_point(alpha = 0.25) +
   facet_wrap(. ~ predictor, ncol = 4)
+```
+
+## Part B
+(b) Fit a smoothing spline model using Terminal as the only predictor of Outstate for a range of degrees of freedom, as well as the degree of freedom obtained by generalized cross- validation, and plot the resulting fits. Describe the results obtained.
+```{r}
+smooth_spline_fit <- smooth.spline(school_no_columbia_dat$terminal, school_no_columbia_dat$outstate)
+smooth_spline_fit$df
+
+terminal_lims <- range(school_no_columbia_dat$terminal)
+terminal_grid <- seq(from = terminal_lims[1], to = terminal_lims[2])
+
+pred_smooth <- predict(smooth_spline_fit, 
+                       x = terminal_grid)
+
+pred_sspline_df <- data.frame(pred = pred_smooth$y,
+                             terminal = terminal_grid)
+
+p <- ggplot(data = school_no_columbia_dat, 
+            aes(
+              x = terminal,
+              y = outstate
+            )) + geom_point() + theme_bw()
+
+p + geom_line(
+  aes(
+    x = terminal, 
+    y = pred), 
+  data = pred_sspline_df,
+  color = rgb(.8, .1, .1, 1)) + theme_bw()
+```
+
+## Part C
+(c) Fit a generalized additive model (GAM) using all the predictors. Plot the results and explain your findings.
+```{r}
+
 ```
 
