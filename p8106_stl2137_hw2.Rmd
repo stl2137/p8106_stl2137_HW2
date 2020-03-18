@@ -19,9 +19,20 @@ school_no_columbia_dat <- school_dat[-125,]
 ## Part A 
 (a) Create scatter plots of response vs. predictors.
 ```{r}
-school_no_columbia_dat %>% 
-  ggplot(
-    
+predictors_df <- school_no_columbia_dat %>% 
+  select(outstate, everything()) %>% 
+  group_by(college) %>% 
+  pivot_longer(
+    apps:grad_rate, 
+    names_to = "predictor",
+    values_to = "values"
   )
+
+predictors_df %>% 
+  ggplot(
+    aes(x = values, y = outstate, color = predictor)
+  ) +
+  geom_point(alpha = 0.25) +
+  facet_wrap(. ~ predictor, ncol = 4)
 ```
 
