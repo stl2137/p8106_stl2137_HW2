@@ -1,0 +1,27 @@
+---
+title: "P8106_stl2137_HW2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+The response variable is the out-of-state tuition (Outstate). 
+```{r}
+school_dat <- read_csv("./College.csv") %>% 
+  janitor::clean_names()
+
+school_no_columbia_dat <- school_dat[-125,]
+```
+
+## Part A 
+(a) Create scatter plots of response vs. predictors.
+```{r}
+school_no_columbia_dat %>% 
+  ggplot(
+    
+  )
+```
+
