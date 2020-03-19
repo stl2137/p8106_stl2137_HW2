@@ -9,6 +9,7 @@ library(tidyverse)
 library(mgcv)
 library(pdp)
 library(earth)
+library(caret)
 ```
 
 The response variable is the out-of-state tuition (Outstate). 
