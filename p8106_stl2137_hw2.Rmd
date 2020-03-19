@@ -69,7 +69,7 @@ p + geom_line(
 ```
 
 ## Part C
-(c) Fit a generalized additive model (GAM) using all the predictors. Plot the results and explain your findings.
+(c) Plot the results and explain your findings.
 ```{r}
 gam_school_1 <- gam(outstate ~ apps + accept + enroll + top10perc + top25perc + f_undergrad + p_undergrad + room_board + books + personal + ph_d + s(terminal) + s_f_ratio + perc_alumni + expend + grad_rate, data = school_no_columbia_dat)
 
@@ -78,7 +78,6 @@ plot(gam_school_1)
 
 ## Part D
 
-(d) Fit a multivariate adaptive regression spline (MARS) model using all the predictors. Report the final model. Present the partial dependence plot of an arbitrary predictor in your final model.
 ```{r}
 # matrix of predictors 
 school_no_columbia_dat <- school_no_columbia_dat[-1]
@@ -113,17 +112,15 @@ grid.arrange(partial_school_1, partial_school_2, ncol = 2)
 ```
 
 ## Part E
-Based on the above GAM and MARS models, predict the out-of-state tuition of Columbia University.
+
 ```{r}
 ### Grabbing Columbia observation
 columbia_dat <- school_dat[125,]
 
 columbia_gam <- predict(gam_school_1, newdata = columbia_dat)
 
-columbia_mars <- predict(mars_fit, newdata = columbia_dat)
+columbia_mars <- as.numeric(predict(mars_fit, newdata = columbia_dat))
 
 ```
 
-Based off the GAM model, we predict that the out-of-state tuition at Columbia University is `r columbia_gam`.
-
-Based off the MARS model, we predict that the out-of-state tuition at Columbia University is `r columbia_mars`.
+Based off the GAM model, we predict that the out-of-state tuition at Columbia University is `r columbia_gam`. Based off the MARS model, we predict that the out-of-state tuition at Columbia University is `r columbia_mars`. Between the two models, the GAM model predicts the out-of-state tuition for Columbia to be higher by `r columbia_gam - columbia_mars` compared to MARS model. 
