@@ -13,7 +13,7 @@ library(caret)
 ```
 
 The response variable is the out-of-state tuition (Outstate). 
-```{r}
+```{r, results=FALSE, warning=FALSE}
 school_dat <- read_csv("./College.csv") %>% 
   janitor::clean_names()
 
@@ -88,6 +88,8 @@ y <- school_no_columbia_dat$outstate
 
 mars_grid <- expand.grid(degree = 1:2,
                          nprune = 2:10)
+
+control1 <- trainControl(method = "cv", number = 10)
 
 set.seed(1)
 mars_fit <- train(x, y, 
