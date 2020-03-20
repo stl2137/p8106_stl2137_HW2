@@ -1,8 +1,8 @@
 ---
 title: "P8106_stl2137_HW2"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
