@@ -96,13 +96,11 @@ plot(gam_school_1)
 #gam.check(gam_school_1)
 ```
 
-From the plot with degrees of freedom being `r smooth_spline_fit$df`, we can see that when the percentage of faculty members with a terminal degree hits 80%, the out-of-state tutition costs look to increase/cost more. Prior to 80% of faculty members with a terminal degree, the out-of-state costs look to be lower/cost less. 
+From the plot, we can see that when the percentage of faculty members with a terminal degree hits 80%, the out-of-state tutition costs look to increase/cost more. Prior to 80% of faculty members with a terminal degree, the out-of-state costs look to be lower/cost less. 
 
 ## Part D
 
 ```{r}
-
-
 mars_grid <- expand.grid(degree = 1:2,
                          nprune = 2:10)
 
