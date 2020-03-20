@@ -34,16 +34,28 @@ predictors_df <- school_no_columbia_dat %>%
     values_to = "values"
   )
 
+### Tidyverse plotting
+
 predictors_df %>% 
   ggplot(
     aes(x = values, y = outstate, color = predictor)
   ) +
   geom_point(alpha = 0.25) +
   facet_wrap(. ~ predictor, ncol = 4)
+
+### Using base R plotting
+# matrix of predictors 
+school_no_columbia_dat <- school_no_columbia_dat[-1]
+  
+x <- model.matrix(outstate~.,school_no_columbia_dat)[,-1]
+y <- school_no_columbia_dat$outstate
+
+featurePlot(x, y, plot = "scatter", labels = c("","Y"),
+            type = c("p"), layout = c(4,4))
 ```
 
 ## Part B
-(b) Fit a smoothing spline model using Terminal as the only predictor of Outstate for a range of degrees of freedom, as well as the degree of freedom obtained by generalized cross- validation, and plot the resulting fits. Describe the results obtained.
+Describe the results obtained.
 ```{r}
 smooth_spline_fit <- smooth.spline(school_no_columbia_dat$terminal, school_no_columbia_dat$outstate)
 smooth_spline_fit$df
@@ -71,22 +83,25 @@ p + geom_line(
   color = rgb(.8, .1, .1, 1)) + theme_bw()
 ```
 
+From the smoothing spline model, we are able to assertain that the degree of freedoms is `r smooth_spline_fit$df`. From the plot `p`, we can see that there is a non-linear trend between out-of-state tuition and the percentage of faculty with a terminal degree. The smoothing spline, represented by the red line, shows that the prediction of the smoothing spline fits the data. 
+
 ## Part C
-(c) Plot the results and explain your findings.
+
 ```{r}
 gam_school_1 <- gam(outstate ~ apps + accept + enroll + top10perc + top25perc + f_undergrad + p_undergrad + room_board + books + personal + ph_d + s(terminal) + s_f_ratio + perc_alumni + expend + grad_rate, data = school_no_columbia_dat)
 
 plot(gam_school_1)
+
+### To check residuals
+#gam.check(gam_school_1)
 ```
+
+From the plot with degrees of freedom being `r smooth_spline_fit$df`, we can see that when the percentage of faculty members with a terminal degree hits 80%, the out-of-state tutition costs look to increase/cost more. Prior to 80% of faculty members with a terminal degree, the out-of-state costs look to be lower/cost less. 
 
 ## Part D
 
 ```{r}
-# matrix of predictors 
-school_no_columbia_dat <- school_no_columbia_dat[-1]
-  
-x <- model.matrix(outstate~.,school_no_columbia_dat)[,-1]
-y <- school_no_columbia_dat$outstate
+
 
 mars_grid <- expand.grid(degree = 1:2,
                          nprune = 2:10)
